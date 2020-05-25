@@ -12,56 +12,39 @@ const (
 	bulletRenderCount = 100
 )
 
-type playerBullet struct {
-	tex   *sdl.Texture
-	x, y  float64
-	angle float64
+// type playerBullet struct {
+// 	tex   *sdl.Texture
+// 	x, y  float64
+// 	angle float64
 
-	active bool
+// 	active bool
+// }
+
+func newBullet(renderer *sdl.Renderer) *element {
+	bullet := &element{}
+
+	sr := newSpriteRenderer(bullet, renderer, "assets/sprites/bullet_pink.bmp")
+	bullet.addComponent(sr)
+
+	mover := newBulletMover(bullet, bulletSpeed)
+	bullet.addComponent(mover)
+
+	bullet.active = false
+
+	return bullet
 }
 
-func newBullet(renderer *sdl.Renderer) (bul playerBullet) {
-	bul.tex = textureFromBMP(renderer, "assets/sprites/bullet_pink.bmp")
-	return bul
-}
-
-func (bul *playerBullet) draw(renderer *sdl.Renderer) {
-	if !bul.active {
-		return
-	}
-
-	// Converting playerBullet coordinates to top left of sprite
-	x := bul.x - bulletSize/2.0
-	y := bul.y - bulletSize/2.0
-
-	renderer.CopyEx(bul.tex,
-		&sdl.Rect{X: 0, Y: 0, W: bulletSize, H: bulletSize},
-		&sdl.Rect{X: int32(x), Y: int32(y), W: bulletSize * 2, H: bulletSize * 2},
-		(bul.angle*180/math.Pi)+45,
-		&sdl.Point{X: bulletSize, Y: bulletSize},
-		sdl.FLIP_NONE)
-}
-
-func (bul *playerBullet) update() {
-	bul.x += bulletSpeed * math.Cos(bul.angle)
-	bul.y += bulletSpeed * math.Sin(bul.angle)
-
-	if bul.x > screenWidth || bul.x < 0 || bul.y > screenHeight || bul.y < 0 {
-		bul.active = false
-	}
-}
-
-var bulletPool []*playerBullet
+var bulletPool []*element
 
 func initBulletPool(renderer *sdl.Renderer) {
 	for i := 0; i < bulletRenderCount; i++ {
 		bul := newBullet(renderer)
-		bulletPool = append(bulletPool, &bul)
+		elements = append(elements, bul)
+		bulletPool = append(bulletPool, bul)
 	}
 }
 
-//try to grab a playerBullet from the playerBullet pool(only non-active bullets)
-func bulletFromPool() (*playerBullet, bool) {
+func bulletFromPool() (*element, bool) {
 	for _, bul := range bulletPool {
 		if !bul.active {
 			return bul, true
@@ -69,4 +52,34 @@ func bulletFromPool() (*playerBullet, bool) {
 	}
 
 	return nil, false
+}
+
+type bulletMover struct {
+	container *element
+	speed     float64
+}
+
+func newBulletMover(container *element, speed float64) *bulletMover {
+	return &bulletMover{
+		container: container,
+		speed:     speed,
+	}
+}
+
+func (mover *bulletMover) onDraw(renderer *sdl.Renderer) error {
+	return nil
+}
+
+func (mover *bulletMover) onUpdate() error {
+	cont := mover.container
+
+	cont.position.x += bulletSpeed * math.Cos(cont.rotation)
+	cont.position.y += bulletSpeed * math.Sin(cont.rotation)
+
+	if cont.position.x > screenWidth || cont.position.x < 0 ||
+		cont.position.y > screenHeight || cont.position.y < 0 {
+		cont.active = false
+	}
+
+	return nil
 }

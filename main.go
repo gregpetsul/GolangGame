@@ -7,23 +7,9 @@ import (
 )
 
 const (
-	screenWidth  = 1600
-	screenHeight = 900
+	screenWidth  = 800
+	screenHeight = 600
 )
-
-func textureFromBMP(renderer *sdl.Renderer, filename string) *sdl.Texture {
-	img, err := sdl.LoadBMP(filename)
-	if err != nil {
-		panic(fmt.Errorf("loading %v: %v", filename, err))
-	}
-	defer img.Free()
-	tex, err := renderer.CreateTextureFromSurface(img)
-	if err != nil {
-		panic(fmt.Errorf("creating texture from %v: %v", filename, err))
-	}
-
-	return tex
-}
 
 func main() {
 	if err := sdl.Init(sdl.INIT_EVERYTHING); err != nil {
@@ -48,10 +34,9 @@ func main() {
 		return
 	}
 	defer renderer.Destroy()
+	elements = append(elements, newPlayer(renderer))
 
-	plr := newPlayer(renderer)
-
-	enemy := newBasicEnemy(renderer, 300, 450)
+	elements = append(elements, newEnemy(renderer, vector{300, 400}))
 
 	initBulletPool(renderer)
 
@@ -66,14 +51,19 @@ func main() {
 		renderer.SetDrawColor(255, 255, 255, 255)
 		renderer.Clear()
 
-		plr.draw(renderer)
-		plr.update()
-
-		enemy.draw(renderer)
-
-		for _, bul := range bulletPool {
-			bul.draw(renderer)
-			bul.update()
+		for _, elem := range elements {
+			if elem.active {
+				err = elem.update()
+				if err != nil {
+					fmt.Println("updating element:", err)
+					return
+				}
+				err = elem.draw(renderer)
+				if err != nil {
+					fmt.Println("drawing element:", elem)
+					return
+				}
+			}
 		}
 
 		renderer.Present()
