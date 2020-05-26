@@ -30,18 +30,18 @@ func (mover *keyboardMover) onUpdate() error {
 	//left and right movement
 	if keys[sdl.SCANCODE_LEFT] == 1 || keys[sdl.SCANCODE_A] == 1 {
 		if cont.position.x-(mover.sr.width/2.0) > 0 {
-			cont.position.x -= mover.speed
+			cont.position.x -= mover.speed * delta
 		}
 	} else if keys[sdl.SCANCODE_RIGHT] == 1 || keys[sdl.SCANCODE_D] == 1 {
 		if cont.position.x+(mover.sr.height/2.0) < screenWidth {
-			cont.position.x += mover.speed
+			cont.position.x += mover.speed * delta
 		}
 	}
 	//up and down movement
 	if keys[sdl.SCANCODE_DOWN] == 1 || keys[sdl.SCANCODE_S] == 1 {
-		cont.position.y += mover.speed
+		cont.position.y += mover.speed * delta
 	} else if keys[sdl.SCANCODE_UP] == 1 || keys[sdl.SCANCODE_W] == 1 {
-		cont.position.y -= mover.speed
+		cont.position.y -= mover.speed * delta
 	}
 
 	return nil

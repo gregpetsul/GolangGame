@@ -8,7 +8,7 @@ import (
 
 const (
 	bulletSize        = 8
-	bulletSpeed       = 0.2
+	bulletSpeed       = 10 //pixels per second
 	bulletRenderCount = 100
 )
 
@@ -76,8 +76,8 @@ func (mover *bulletMover) onCollision(other *element) error {
 func (mover *bulletMover) onUpdate() error {
 	c := mover.container
 
-	c.position.x += bulletSpeed * math.Cos(c.rotation)
-	c.position.y += bulletSpeed * math.Sin(c.rotation)
+	c.position.x += bulletSpeed * math.Cos(c.rotation) * delta
+	c.position.y += bulletSpeed * math.Sin(c.rotation) * delta
 
 	if c.position.x > screenWidth || c.position.x < 0 ||
 		c.position.y > screenHeight || c.position.y < 0 {
