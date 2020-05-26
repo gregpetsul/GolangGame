@@ -14,6 +14,17 @@ func newEnemy(renderer *sdl.Renderer, position vector) *element {
 
 	sr := newSpriteRenderer(enemy, renderer, "assets/sprites/basic_zombie.bmp")
 	enemy.addComponent(sr)
+
+	atbl := newAttackable(enemy)
+	enemy.addComponent(atbl)
+
+	col := circle{
+		centre: enemy.position,
+		radius: 8,
+	}
+
+	enemy.collisions = append(enemy.collisions, col)
+
 	enemy.active = true
 
 	return enemy

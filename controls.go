@@ -50,6 +50,9 @@ func (mover *keyboardMover) onUpdate() error {
 func (mover *keyboardMover) onDraw(renderer *sdl.Renderer) error {
 	return nil
 }
+func (mover *keyboardMover) onCollision(other *element) error {
+	return nil
+}
 
 type keyboardShooter struct {
 	container *element
@@ -83,6 +86,9 @@ func (mover *keyboardShooter) onUpdate() error {
 func (mover *keyboardShooter) onDraw(renderer *sdl.Renderer) error {
 	return nil
 }
+func (mover *keyboardShooter) onCollision(other *element) error {
+	return nil
+}
 
 func (mover *keyboardShooter) shoot(x, y float64, xmouse, ymouse int32) {
 	if bul, ok := bulletFromPool(); ok {
@@ -91,5 +97,6 @@ func (mover *keyboardShooter) shoot(x, y float64, xmouse, ymouse int32) {
 		bul.position.y = y
 		bul.rotation = math.Atan2(float64(ymouse)-y, float64(xmouse)-x)
 		bul.imageOffset = 45
+		bul.tag = "bullet"
 	}
 }

@@ -9,7 +9,7 @@ import (
 const (
 	playerSpeed        = 0.05
 	playerSize         = 16
-	playerShotCooldown = time.Millisecond * 100
+	playerShotCooldown = time.Millisecond * 500
 )
 
 func newPlayer(renderer *sdl.Renderer) *element {

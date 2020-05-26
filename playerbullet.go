@@ -8,17 +8,9 @@ import (
 
 const (
 	bulletSize        = 8
-	bulletSpeed       = 0.5
+	bulletSpeed       = 0.2
 	bulletRenderCount = 100
 )
-
-// type playerBullet struct {
-// 	tex   *sdl.Texture
-// 	x, y  float64
-// 	angle float64
-
-// 	active bool
-// }
 
 func newBullet(renderer *sdl.Renderer) *element {
 	bullet := &element{}
@@ -28,6 +20,12 @@ func newBullet(renderer *sdl.Renderer) *element {
 
 	mover := newBulletMover(bullet, bulletSpeed)
 	bullet.addComponent(mover)
+
+	col := circle{
+		centre: bullet.position,
+		radius: 2,
+	}
+	bullet.collisions = append(bullet.collisions, col)
 
 	bullet.active = false
 
@@ -70,16 +68,23 @@ func (mover *bulletMover) onDraw(renderer *sdl.Renderer) error {
 	return nil
 }
 
+func (mover *bulletMover) onCollision(other *element) error {
+	mover.container.active = false
+	return nil
+}
+
 func (mover *bulletMover) onUpdate() error {
-	cont := mover.container
+	c := mover.container
 
-	cont.position.x += bulletSpeed * math.Cos(cont.rotation)
-	cont.position.y += bulletSpeed * math.Sin(cont.rotation)
+	c.position.x += bulletSpeed * math.Cos(c.rotation)
+	c.position.y += bulletSpeed * math.Sin(c.rotation)
 
-	if cont.position.x > screenWidth || cont.position.x < 0 ||
-		cont.position.y > screenHeight || cont.position.y < 0 {
-		cont.active = false
+	if c.position.x > screenWidth || c.position.x < 0 ||
+		c.position.y > screenHeight || c.position.y < 0 {
+		c.active = false
 	}
+
+	c.collisions[0].centre = c.position
 
 	return nil
 }

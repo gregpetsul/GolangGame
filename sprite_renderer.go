@@ -52,6 +52,10 @@ func (sr *spriteRenderer) onUpdate() error {
 	return nil
 }
 
+func (sr *spriteRenderer) onCollision(other *element) error {
+	return nil
+}
+
 func textureFromBMP(renderer *sdl.Renderer, filename string) *sdl.Texture {
 	img, err := sdl.LoadBMP(filename)
 	if err != nil {
