@@ -15,7 +15,7 @@ const (
 )
 
 var delta float64
-
+var scale int32 = 4 // for TEMPORARY testing purposes TODO: remove scale
 func main() {
 	if err := sdl.Init(sdl.INIT_EVERYTHING); err != nil {
 		fmt.Println("initializing SDL:", err)

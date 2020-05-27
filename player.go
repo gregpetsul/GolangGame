@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/veandco/go-sdl2/sdl"
@@ -16,19 +17,29 @@ func newPlayer(renderer *sdl.Renderer) *element {
 	player := &element{}
 
 	player.position = vector{
-		x: 250,
-		y: 250,
+		x: screenWidth / 2,
+		y: screenHeight / 2,
 	}
 
 	player.active = true
 
-	sr := newSpriteRenderer(player, renderer, "assets/sprites/player_pink.bmp")
-	player.addComponent(sr)
+	idleSequence, err := newSequence("assets/sprites/player/idle", 5, true, renderer)
+	if err != nil {
+		panic(fmt.Errorf("creating idle sequence: %v", err))
+	}
+	sequences := map[string]*sequence{
+		"idle": idleSequence,
+	}
+	animator := newAnimator(player, sequences, "idle")
+	player.addComponent(animator)
 
-	mover := newKeyboardMover(player, playerSpeed)
+	// sr := newSpriteRenderer(player, renderer, "assets/sprites/player_pink.bmp")
+	// player.addComponent(sr)
+
+	mover := newPlayerMover(player, playerSpeed)
 	player.addComponent(mover)
 
-	shooter := newKeyboardShooter(player, playerShotCooldown)
+	shooter := newPlayerShooter(player, playerShotCooldown)
 	player.addComponent(shooter)
 
 	return player

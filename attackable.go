@@ -6,10 +6,13 @@ import (
 
 type attackable struct {
 	container *element
+	animator  *animator
 }
 
 func newAttackable(container *element) *attackable {
-	return &attackable{container: container}
+	return &attackable{
+		container: container,
+		animator:  container.getComponent(&animator{}).(*animator)}
 }
 
 func (atbl *attackable) onDraw(renderer *sdl.Renderer) error {
@@ -17,12 +20,15 @@ func (atbl *attackable) onDraw(renderer *sdl.Renderer) error {
 }
 
 func (atbl *attackable) onUpdate() error {
+	if atbl.animator.finished && atbl.animator.current == "destroy" {
+		atbl.container.active = false
+	}
 	return nil
 }
 
 func (atbl *attackable) onCollision(other *element) error {
 	if other.tag == "bullet" {
-		atbl.container.active = false
+		atbl.animator.setSequence("destroy")
 	}
 	return nil
 }

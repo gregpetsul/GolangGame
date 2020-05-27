@@ -23,7 +23,7 @@ func newBullet(renderer *sdl.Renderer) *element {
 
 	col := circle{
 		centre: bullet.position,
-		radius: 2,
+		radius: 2 * float64(scale), //TODO: remove scale
 	}
 	bullet.collisions = append(bullet.collisions, col)
 
