@@ -20,6 +20,7 @@ type component interface {
 
 type element struct {
 	position    vector
+	velocity    vector
 	rotation    float64
 	imageOffset float64
 	size        float64

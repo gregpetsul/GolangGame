@@ -21,20 +21,38 @@ func newPlayer(renderer *sdl.Renderer) *element {
 		y: screenHeight / 2,
 	}
 
+	player.velocity = vector{
+		x: 0,
+		y: 0,
+	}
+
 	player.active = true
 
-	idleSequence, err := newSequence("assets/sprites/player/idle", 5, true, renderer)
+	frontIdleSequence, err := newSequence("assets/sprites/player/front_idle", 5, true, renderer)
 	if err != nil {
-		panic(fmt.Errorf("creating idle sequence: %v", err))
+		panic(fmt.Errorf("creating front_idle sequence: %v", err))
 	}
-	sequences := map[string]*sequence{
-		"idle": idleSequence,
+	frontWalkSequence, err := newSequence("assets/sprites/player/front_walk", playerSpeed, true, renderer)
+	if err != nil {
+		panic(fmt.Errorf("creating front_walk sequence: %v", err))
 	}
-	animator := newAnimator(player, sequences, "idle")
-	player.addComponent(animator)
+	backIdleSequence, err := newSequence("assets/sprites/player/back_idle", 5, true, renderer)
+	if err != nil {
+		panic(fmt.Errorf("creating back_idle sequence: %v", err))
+	}
+	backWalkSequence, err := newSequence("assets/sprites/player/back_walk", playerSpeed, true, renderer)
+	if err != nil {
+		panic(fmt.Errorf("creating back_walk sequence: %v", err))
+	}
 
-	// sr := newSpriteRenderer(player, renderer, "assets/sprites/player_pink.bmp")
-	// player.addComponent(sr)
+	sequences := map[string]*sequence{
+		"front_idle": frontIdleSequence,
+		"front_walk": frontWalkSequence,
+		"back_idle":  backIdleSequence,
+		"back_walk":  backWalkSequence,
+	}
+	animator := newAnimator(player, sequences, "front_idle")
+	player.addComponent(animator)
 
 	mover := newPlayerMover(player, playerSpeed)
 	player.addComponent(mover)

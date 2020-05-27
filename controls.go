@@ -10,41 +10,69 @@ import (
 type playerMover struct {
 	container *element
 	speed     float64
-
-	//sr *spriteRenderer
+	animator  *animator
 }
 
 func newPlayerMover(container *element, speed float64) *playerMover {
 	return &playerMover{
 		container: container,
 		speed:     speed,
-		//sr:        container.getComponent(&spriteRenderer{}).(*spriteRenderer),
+		animator:  container.getComponent(&animator{}).(*animator),
 	}
 }
 
 func (mover *playerMover) onUpdate() error {
 	keys := sdl.GetKeyboardState()
-
 	cont := mover.container
+	cont.velocity = vector{
+		x: 0,
+		y: 0,
+	}
 
 	//left and right movement
 	if keys[sdl.SCANCODE_LEFT] == 1 || keys[sdl.SCANCODE_A] == 1 {
 		if cont.position.x /*-(mover.sr.width/2.0)*/ > 0 {
 			cont.position.x -= mover.speed * delta
+			cont.velocity.x = -mover.speed
 		}
 	} else if keys[sdl.SCANCODE_RIGHT] == 1 || keys[sdl.SCANCODE_D] == 1 {
 		if cont.position.x /*+(mover.sr.height/2.0)*/ < screenWidth {
 			cont.position.x += mover.speed * delta
+			cont.velocity.x = mover.speed
 		}
 	}
 	//up and down movement
 	if keys[sdl.SCANCODE_DOWN] == 1 || keys[sdl.SCANCODE_S] == 1 {
 		cont.position.y += mover.speed * delta
+		cont.velocity.y = -mover.speed
 	} else if keys[sdl.SCANCODE_UP] == 1 || keys[sdl.SCANCODE_W] == 1 {
 		cont.position.y -= mover.speed * delta
+		cont.velocity.y = mover.speed
 	}
 
+	mover.setAnimation()
+
 	return nil
+}
+
+func (mover *playerMover) setAnimation() {
+	vel := mover.container.velocity
+	an := mover.animator
+	if vel.y > 0 {
+		if an.current != "back_walk" {
+			an.setSequence("back_walk")
+		}
+	} else if vel.y < 0 {
+		if an.current != "front_walk" {
+			an.setSequence("front_walk")
+		}
+	} else if vel.y == 0 && vel.x == 0 {
+		if an.current == "back_walk" {
+			an.setSequence("back_idle")
+		} else if an.current == "front_walk" {
+			an.setSequence("front_idle")
+		}
+	}
 }
 
 func (mover *playerMover) onDraw(renderer *sdl.Renderer) error {
