@@ -44,12 +44,32 @@ func newPlayer(renderer *sdl.Renderer) *element {
 	if err != nil {
 		panic(fmt.Errorf("creating back_walk sequence: %v", err))
 	}
+	leftIdleSequence, err := newSequence("assets/sprites/player/left_idle", 5, true, renderer)
+	if err != nil {
+		panic(fmt.Errorf("creating left_idle sequence: %v", err))
+	}
+	leftWalkSequence, err := newSequence("assets/sprites/player/left_walk", 5, true, renderer)
+	if err != nil {
+		panic(fmt.Errorf("creating left_walk sequence: %v", err))
+	}
+	rightIdleSequence, err := newSequence("assets/sprites/player/right_idle", 5, true, renderer)
+	if err != nil {
+		panic(fmt.Errorf("creating right_idle sequence: %v", err))
+	}
+	rightWalkSequence, err := newSequence("assets/sprites/player/right_walk", 5, true, renderer)
+	if err != nil {
+		panic(fmt.Errorf("creating right_walk sequence: %v", err))
+	}
 
 	sequences := map[string]*sequence{
 		"front_idle": frontIdleSequence,
 		"front_walk": frontWalkSequence,
 		"back_idle":  backIdleSequence,
 		"back_walk":  backWalkSequence,
+		"left_idle":  leftIdleSequence,
+		"left_walk":  leftWalkSequence,
+		"right_idle": rightIdleSequence,
+		"right_walk": rightWalkSequence,
 	}
 	animator := newAnimator(player, sequences, "front_idle")
 	player.addComponent(animator)

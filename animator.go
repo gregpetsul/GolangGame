@@ -48,8 +48,10 @@ func (an *animator) onCollision(other *element) error {
 }
 
 func (an *animator) setSequence(name string) {
-	an.current = name
-	an.lastFramChange = time.Now()
+	if an.current != name {
+		an.current = name
+		an.lastFramChange = time.Now()
+	}
 }
 
 type sequence struct {

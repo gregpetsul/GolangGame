@@ -2,6 +2,7 @@ package main
 
 import (
 	"math"
+	"strings"
 	"time"
 
 	"github.com/veandco/go-sdl2/sdl"
@@ -58,20 +59,19 @@ func (mover *playerMover) onUpdate() error {
 func (mover *playerMover) setAnimation() {
 	vel := mover.container.velocity
 	an := mover.animator
-	if vel.y > 0 {
-		if an.current != "back_walk" {
-			an.setSequence("back_walk")
-		}
-	} else if vel.y < 0 {
-		if an.current != "front_walk" {
-			an.setSequence("front_walk")
-		}
-	} else if vel.y == 0 && vel.x == 0 {
-		if an.current == "back_walk" {
-			an.setSequence("back_idle")
-		} else if an.current == "front_walk" {
-			an.setSequence("front_idle")
-		}
+
+	switch {
+	case vel.x > 0:
+		an.setSequence("right_walk")
+	case vel.x < 0:
+		an.setSequence("left_walk")
+	case vel.y > 0:
+		an.setSequence("back_walk")
+	case vel.y < 0:
+		an.setSequence("front_walk")
+	case vel.y == 0 && vel.x == 0:
+		dir := strings.Split(an.current, "_")[0]
+		an.setSequence(dir + "_idle")
 	}
 }
 
