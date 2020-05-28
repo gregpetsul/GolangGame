@@ -10,21 +10,23 @@ import (
 const (
 	playerSpeed        = 5 //pixels per second
 	playerSize         = 16
-	playerShotCooldown = time.Millisecond * 500
+	playerShotCooldown = time.Millisecond * 250
 )
 
 func newPlayer(renderer *sdl.Renderer) *element {
 	player := &element{}
 
 	player.position = vector{
-		x: screenWidth / 2,
-		y: screenHeight / 2,
+		x: float64(screenWidth/2 - playerSize*scale/2),
+		y: float64(screenHeight/2 - playerSize*scale/2),
 	}
 
 	player.velocity = vector{
 		x: 0,
 		y: 0,
 	}
+
+	player.tag = "player"
 
 	player.active = true
 

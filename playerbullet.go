@@ -8,7 +8,7 @@ import (
 
 const (
 	bulletSize        = 8
-	bulletSpeed       = 10 //pixels per second
+	bulletSpeed       = 20 //pixels per second
 	bulletRenderCount = 100
 )
 

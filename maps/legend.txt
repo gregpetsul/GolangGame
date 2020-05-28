@@ -1,0 +1,3 @@
+dirt: d
+grass: g
+water: w

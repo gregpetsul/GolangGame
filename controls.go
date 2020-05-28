@@ -33,27 +33,44 @@ func (mover *playerMover) onUpdate() error {
 	//left and right movement
 	if keys[sdl.SCANCODE_LEFT] == 1 || keys[sdl.SCANCODE_A] == 1 {
 		if cont.position.x /*-(mover.sr.width/2.0)*/ > 0 {
-			cont.position.x -= mover.speed * delta
+			moveElements(mover, "left")
 			cont.velocity.x = -mover.speed
 		}
 	} else if keys[sdl.SCANCODE_RIGHT] == 1 || keys[sdl.SCANCODE_D] == 1 {
 		if cont.position.x /*+(mover.sr.height/2.0)*/ < screenWidth {
-			cont.position.x += mover.speed * delta
+			moveElements(mover, "right")
 			cont.velocity.x = mover.speed
 		}
 	}
 	//up and down movement
 	if keys[sdl.SCANCODE_DOWN] == 1 || keys[sdl.SCANCODE_S] == 1 {
-		cont.position.y += mover.speed * delta
+		moveElements(mover, "down")
 		cont.velocity.y = -mover.speed
 	} else if keys[sdl.SCANCODE_UP] == 1 || keys[sdl.SCANCODE_W] == 1 {
-		cont.position.y -= mover.speed * delta
+		moveElements(mover, "up")
 		cont.velocity.y = mover.speed
 	}
 
 	mover.setAnimation()
 
 	return nil
+}
+
+func moveElements(mover *playerMover, dir string) {
+	for _, elem := range elements {
+		if elem.active && elem.tag != "player" {
+			if dir == "left" {
+				elem.position.x += mover.speed * delta
+			} else if dir == "right" {
+				elem.position.x -= mover.speed * delta
+			} else if dir == "up" {
+				elem.position.y += mover.speed * delta
+			} else if dir == "down" {
+				elem.position.y -= mover.speed * delta
+			}
+
+		}
+	}
 }
 
 func (mover *playerMover) setAnimation() {

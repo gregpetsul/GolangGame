@@ -23,7 +23,7 @@ func drawTexture(tex *sdl.Texture, position vector, rotation float64, size float
 	return renderer.CopyEx(
 		tex,
 		&sdl.Rect{X: 0, Y: 0, W: int32(width), H: int32(height)},
-		&sdl.Rect{X: int32(x), Y: int32(y), W: int32(width) * int32(size) * scale, H: int32(height) * int32(size) * scale}, //TODO: remove scale (twice)
+		&sdl.Rect{X: int32(x), Y: int32(y), W: int32(width) * int32(size) * int32(scale), H: int32(height) * int32(size) * int32(scale)}, //TODO: remove scale (twice)
 		rotation,
 		&sdl.Point{X: int32(width) / 2, Y: int32(height) / 2},
 		sdl.FLIP_NONE)

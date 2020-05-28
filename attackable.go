@@ -22,6 +22,7 @@ func (atbl *attackable) onDraw(renderer *sdl.Renderer) error {
 
 //will keep an "eye" on the attackable object to check if the "destroy" animation is complete then will deactivate the element
 func (atbl *attackable) onUpdate() error {
+	atbl.container.collisions[0].centre = atbl.container.position //update the collision position ot match attackables position
 	if atbl.animator.finished && atbl.animator.current == "destroy" {
 		atbl.container.active = false
 	}
