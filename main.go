@@ -15,7 +15,7 @@ const (
 )
 
 var delta float64
-var scale int32 = 4 // for TEMPORARY testing purposes TODO: remove scale
+var scale int = 4 // for TEMPORARY testing purposes TODO: remove scale
 func main() {
 	if err := sdl.Init(sdl.INIT_EVERYTHING); err != nil {
 		fmt.Println("initializing SDL:", err)
@@ -39,6 +39,10 @@ func main() {
 		return
 	}
 	defer renderer.Destroy()
+
+	//initTileMap(renderer)
+	parseMapFile(renderer, "test.map")
+
 	elements = append(elements, newPlayer(renderer))
 
 	elements = append(elements, newEnemy(renderer, vector{300, 400}))
