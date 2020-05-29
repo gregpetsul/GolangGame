@@ -48,7 +48,8 @@ func main() {
 	elements = append(elements, newEnemy(renderer, vector{300, 400}))
 
 	initBulletPool(renderer)
-
+	fpsTime := time.Now()
+	fps := 0
 	for {
 		frameStartTime := time.Now()
 
@@ -84,5 +85,9 @@ func main() {
 		renderer.Present()
 
 		delta = time.Since(frameStartTime).Seconds() * targetTicksPerSecond
+		if time.Since(fpsTime).Seconds() >= 1 {
+			fpsTime = time.Now()
+			fmt.Println(fps)
+		}
 	}
 }
