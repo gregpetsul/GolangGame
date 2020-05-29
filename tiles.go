@@ -7,22 +7,40 @@ func newTile(renderer *sdl.Renderer, tileType string, position vector) *element 
 	tile.position = position
 	tile.tag = "tile"
 
-	sr := newSpriteRenderer(tile, renderer, "assets/tiles/testing/"+tileType+".bmp")
-	tile.addComponent(sr)
+	tr := newTileRenderer(tile, renderer, "assets/tiles/testing/"+tileType+".bmp")
+	tile.addComponent(tr)
 
 	tile.active = true
 
 	return tile
 }
 
-// func initTileMap(renderer *sdl.Renderer, m [][]string) {
-// 	for x := 0; x <= 15; x++ {
-// 		for y := 0; y <= 15; y++ {
-// 			tile := newTile(renderer, "dirt", vector{x: float64(x*16) * float64(scale), y: float64(y*16) * float64(scale)})
-// 			elements = append(elements, tile)
-// 		}
-// 	}
-//}
+type tileRenderer struct {
+	container *element
+	tex       *sdl.Texture
+}
+
+func newTileRenderer(container *element, renderer *sdl.Renderer, filename string) *tileRenderer {
+	tex, err := textureFromBMP(renderer, filename)
+	if err != nil {
+		panic(err)
+	}
+
+	return &tileRenderer{
+		container: container,
+		tex:       tex,
+	}
+}
+
+func (tr *tileRenderer) onDraw(renderer *sdl.Renderer) error {
+	return drawTexture(tr.tex, tr.container.position, 0, tr.container.size, renderer)
+}
+func (tr *tileRenderer) onUpdate() error {
+	return nil
+}
+func (tr *tileRenderer) onCollision(other *element) error {
+	return nil
+}
 
 func renderTile(renderer *sdl.Renderer, tileType string, position vector) {
 	tile := newTile(renderer, tileType, position)
