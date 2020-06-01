@@ -9,6 +9,11 @@ type circle struct {
 	radius float64
 }
 
+func getDist(p1, p2 vector) float64 {
+	return math.Sqrt(math.Pow(p2.x-p1.x, 2) +
+		math.Pow(p2.y-p1.y, 2))
+}
+
 func collides(c1, c2 circle) bool {
 	dist := math.Sqrt(math.Pow(c2.centre.x-c1.centre.x, 2) +
 		math.Pow(c2.centre.y-c1.centre.y, 2))

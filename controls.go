@@ -71,6 +71,20 @@ func moveElements(mover *playerMover, dir string) {
 
 		}
 	}
+	for _, tile := range tiles {
+		if tile.active && tile.tag != "player" {
+			if dir == "left" {
+				tile.position.x += mover.speed * delta
+			} else if dir == "right" {
+				tile.position.x -= mover.speed * delta
+			} else if dir == "up" {
+				tile.position.y += mover.speed * delta
+			} else if dir == "down" {
+				tile.position.y -= mover.speed * delta
+			}
+
+		}
+	}
 }
 
 func (mover *playerMover) setAnimation() {

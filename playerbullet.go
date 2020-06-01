@@ -9,7 +9,7 @@ import (
 const (
 	bulletSize        = 8
 	bulletSpeed       = 20 //pixels per second
-	bulletRenderCount = 100
+	bulletRenderCount = 25
 )
 
 func newBullet(renderer *sdl.Renderer) *element {

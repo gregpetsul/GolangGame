@@ -44,5 +44,7 @@ func (tr *tileRenderer) onCollision(other *element) error {
 
 func renderTile(renderer *sdl.Renderer, tileType string, position vector) {
 	tile := newTile(renderer, tileType, position)
-	elements = append(elements, tile)
+	tiles = append(tiles, tile)
 }
+
+var tiles []*element
